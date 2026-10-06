@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>JobCopilot · 求职准备工作台</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23577b99'/%3E%3Ctext x='16' y='23' font-size='23' text-anchor='middle' fill='white' font-family='sans-serif'%3EJ%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <section id="home-view" class="landing">
+    <header class="landing-header"><a class="wordmark" href="#/home">JobCopilot<span class="brand-dot"></span></a><span class="small muted">你的求职准备工作台</span></header>
+    <main class="hero">
+      <p class="eyebrow">少一点重复准备，多一点明确方向</p>
+      <h1>让每一次求职，<br>都有据可依。</h1>
+      <p class="hero-description">连接你的经历与目标岗位。<br>从匹配分析到定制简历，把下一步准备整理清楚。</p>
+      <a class="button primary hero-cta" href="#/new">开始使用 <span aria-hidden="true">↗</span></a>
+      <div class="hero-footnotes"><span>01 · 看清匹配</span><span>02 · 优化表达</span><span>03 · 准备面试</span></div>
+    </main>
+    <footer class="landing-footer"><span>JOB COPILOT / CAREER WORKSPACE</span><span>本地保存 · 由你掌握</span></footer>
+  </section>
+
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar">
+      <a class="wordmark" href="#/home">JobCopilot<span class="brand-dot"></span></a>
+      <p class="sidebar-caption">求职准备工作台</p>
+      <nav aria-label="主导航">
+        <a href="#/new" data-nav="new"><span aria-hidden="true">＋</span>新建分析</a>
+        <a href="#/history" data-nav="history"><span aria-hidden="true">◷</span>历史记录</a>
+      </nav>
+      <a id="active-task-link" class="task-link" href="#/result/job/active/analysis" hidden>正在分析 · 查看进度</a>
+      <div class="sidebar-footer"><span class="status-dot"></span>仅在本机运行<p>分析结果自动保存至本地。<br>AI建议供参考，投递前请核对。</p></div>
+    </aside>
+    <main class="main-content">
+      <section id="new-view" class="view" hidden>
+        <header class="page-header"><p class="eyebrow">NEW ANALYSIS / 新建分析</p><h1>从你的真实经历开始。</h1><p class="muted">提供简历与目标岗位，获得一份有针对性的求职准备方案。</p></header>
+        <form id="analysis-form" novalidate>
+          <section class="card config-card">
+            <div><h2><span class="step">01</span>运行配置</h2><p class="muted small">Key仅用于本次服务会话，不写入历史记录。</p></div>
+            <div class="key-control"><label for="api-key">DeepSeek API Key</label><div class="password-field"><input id="api-key" name="api_key" type="password" autocomplete="off" placeholder="填写你的 API Key" aria-describedby="api-key-error"><button id="toggle-key" class="text-button" type="button" aria-label="显示API Key" aria-pressed="false">显示</button></div><p id="api-key-error" class="field-error" role="alert"></p></div>
+          </section>
+          <div class="input-grid">
+            <section class="card input-card"><h2><span class="step">02</span>你的简历</h2><div class="segmented" role="group" aria-label="简历输入方式"><button type="button" class="selected" data-input="resume" data-mode="file" aria-pressed="true">上传文件</button><button type="button" data-input="resume" data-mode="text" aria-pressed="false">粘贴文字</button></div>
+              <div id="resume-file-area" class="file-area"><label class="dropzone" for="resume-file"><span class="file-icon" aria-hidden="true">↥</span><strong>拖放文件，或点击选择</strong><span>TXT、MD、PDF、DOCX · 最大200MB</span><input id="resume-file" type="file" accept=".txt,.md,.pdf,.docx"></label><div id="resume-file-info" class="file-info" hidden><span></span><button type="button" class="text-button" data-remove="resume">移除</button></div></div>
+              <div id="resume-text-area" hidden><label class="sr-only" for="resume-text">简历文字</label><textarea id="resume-text" placeholder="粘贴教育背景、项目经历与技能…"></textarea></div>
+              <p class="small muted input-hint">上传DOCX简历，可生成保留原模板的岗位定制版。</p><p id="resume-error" class="field-error" role="alert"></p>
+            </section>
+            <section class="card input-card"><h2><span class="step">03</span>目标岗位</h2><div class="segmented" role="group" aria-label="岗位输入方式"><button type="button" class="selected" data-input="jd" data-mode="text" aria-pressed="true">粘贴文字</button><button type="button" data-input="jd" data-mode="file" aria-pressed="false">上传文件</button></div>
+              <div id="jd-text-area"><label class="sr-only" for="jd-text">岗位描述文字</label><textarea id="jd-text" placeholder="粘贴岗位职责、任职要求与加分项…"></textarea></div>
+              <div id="jd-file-area" class="file-area" hidden><label class="dropzone" for="jd-file"><span class="file-icon" aria-hidden="true">↥</span><strong>拖放文件，或点击选择</strong><span>TXT、MD、PDF、DOCX · 最大200MB</span><input id="jd-file" type="file" accept=".txt,.md,.pdf,.docx"></label><div id="jd-file-info" class="file-info" hidden><span></span><button type="button" class="text-button" data-remove="jd">移除</button></div></div>
+              <p class="small muted input-hint">保留完整职责与要求，帮助系统更准确地理解岗位。</p><p id="jd-error" class="field-error" role="alert"></p>
+            </section>
+          </div>
+          <div class="submit-row"><div class="skill-option"><label class="switch-label"><input id="skill-boost" type="checkbox" checked><span class="switch" aria-hidden="true"></span>补充待掌握技能</label><details class="help"><summary aria-label="技能补充说明">说明</summary><p>最多补充3项，仅使用“正在学习”等待补齐表述，不新增经历或成果。请在投递和面试前核对。</p></details></div><button id="submit-analysis" type="submit" class="button primary">开始分析 <span aria-hidden="true">→</span></button></div>
+          <p id="submit-error" class="field-error" role="alert"></p>
+        </form>
+      </section>
+
+      <section id="history-view" class="view" hidden><header class="page-header"><p class="eyebrow">HISTORY / 历史记录</p><h1>每一次准备，都有迹可循。</h1><p class="muted">回看已完成的分析，继续准备，或下载岗位定制简历。</p></header><div id="history-content" aria-live="polite"></div></section>
+
+      <section id="result-view" class="view" hidden>
+        <header class="page-header result-header"><div><p id="result-eyebrow" class="eyebrow">ANALYSIS / 匹配与优化</p><h1 id="result-title">你的求职分析</h1><p id="result-subtitle" class="muted"></p></div><a id="result-back" class="button secondary" href="#/history">返回历史</a></header>
+        <div id="result-notice" aria-live="polite"></div><div id="result-content" aria-live="polite"></div>
+      </section>
+      <footer class="workspace-footer"><span>JobCopilot</span><span>用真实经历，表达真实价值。</span></footer>
+    </main>
+  </div>
+  <dialog id="delete-dialog"><form method="dialog"><p class="eyebrow">删除历史记录</p><h2>确定永久删除这次分析？</h2><p id="delete-record-title"></p><p class="muted">对应报告、定制简历和分析数据将从本地删除。此操作不可恢复。</p><p id="delete-error" class="field-error" role="alert"></p><div class="dialog-actions"><button class="button secondary" value="cancel">取消</button><button id="confirm-delete" class="button danger" type="button">永久删除</button></div></form></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

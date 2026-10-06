@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+output/
+.streamlit/secrets.toml
+.playwright-cli/
+docs/面试讲解稿.md
+docs/浏览器界面预览.png

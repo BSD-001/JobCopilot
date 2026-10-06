@@ -103,7 +103,8 @@ JobCopilot/
 │   ├── resume.txt
 │   └── jd.txt
 ├── docs/
-│   └── 面试讲解稿.md
+│   ├── web-preview.png
+│   └── 新版验收记录.md
 ├── output/
 ├── tests/
 ├── web/
