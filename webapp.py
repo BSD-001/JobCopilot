@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from threading import Lock
+import sys
 import traceback
 from typing import Callable
 from urllib.parse import quote
@@ -32,6 +33,7 @@ from core.history_store import (
 )
 from core.llm_client import DeepSeekClient
 from core.resume_writing import PENDING_PATTERN
+from core.runtime_paths import default_history_root
 from main import run_pipeline_result
 
 
@@ -101,13 +103,13 @@ async def read_upload(upload: UploadFile) -> bytes:
 
 
 def create_app(
-    history_root: str | Path = PROJECT_ROOT / "output" / "history",
+    history_root: str | Path | None = None,
     client_factory: Callable = DeepSeekClient,
 ) -> FastAPI:
     """可注入模拟客户端和临时历史目录，测试不访问真实AI接口。"""
 
     app = FastAPI(title="JobCopilot", docs_url=None, redoc_url=None)
-    root = Path(history_root).resolve()
+    root = Path(default_history_root() if history_root is None else history_root).resolve()
     jobs = {}
     lock = Lock()
     executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="jobcopilot")
@@ -239,7 +241,7 @@ def create_app(
 
     @app.get("/api/health")
     def health():
-        return {"status": "ok"}
+        return {"status": "ok", "application": "JobCopilot", "windows_package": bool(getattr(sys, "frozen", False))}
 
     @app.post("/api/analyses", status_code=202)
     async def start_analysis(

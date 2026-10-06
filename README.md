@@ -13,6 +13,24 @@ JobCopilot 是一个在本机运行的 AI 求职辅助工具。输入简历和�
 
 ![新建分析界面](docs/web-preview.png)
 
+## Windows便携版（无需Python）
+
+便携包发布后，可在本项目的[Releases页面](https://github.com/BSD-001/JobCopilot/releases)
+下载 `JobCopilot-Windows-x64.zip`。如果尚无同名附件，请先使用下方源码启动方式。
+
+1. 将ZIP“全部解压缩”，不要在压缩包里直接运行。
+2. 打开 `JobCopilot` 文件夹，双击 `JobCopilot.exe`，网页会自动打开。
+3. 保留运行窗口，填自己的DeepSeek Key即可分析；分析结束后再关闭运行窗口。
+
+目标平台为Windows 10/11 x64，不需要安装Python或依赖。不要单独移动EXE或删除
+旁边的 `_internal` 文件夹。重复启动会复用已运行的便携版；其他服务占用端口时会选择空闲端口。
+历史保存在 `%LOCALAPPDATA%\JobCopilot\history`，更新程序不会自动覆盖它。
+源码版历史不自动迁移。完整说明见[便携版使用说明](docs/Windows便携版使用说明.txt)。
+
+便携版仍通过DeepSeek API分析，需要网络和用户自己的Key，真实调用会产生费用。
+当前未做代码签名，遇到系统安全提示时请核对官方仓库、附件及SHA256，不要关闭安全检查。
+`Code → Download ZIP` 下载的是源码，不包含已经构建的EXE。
+
 ## 快速开始（Windows）
 
 需要 Python 3.10 或更高版本。下载本仓库后，在项目目录打开终端：
@@ -241,8 +259,8 @@ output/tailored_resume.docx
 ```
 
 测试包含原27项回归，以及新版接口、文件下载、历史删除隔离、旧历史兼容、
-进度回调与简历写作规则。所有自动测试使用虚构材料和模拟客户端，不调用付费接口。
-首版验收、后续52项离线回归和浏览器检查的证据及限制见[新版验收记录](docs/新版验收记录.md)。
+进度回调、简历写作规则和Windows便携版路径与启动适配。所有自动测试使用虚构材料和模拟客户端，不调用付费接口。
+首版验收、后续59项离线回归、浏览器及便携包检查的证据和限制见[新版验收记录](docs/新版验收记录.md)。
 
 浏览器离线验收可运行下列临时服务；其历史保存在临时目录，停止服务后清理。
 该入口仅用于验收，不是正常 DeepSeek 服务：
@@ -252,6 +270,20 @@ output/tailored_resume.docx
 ```
 
 打开 `http://localhost:8503/`，使用任意非空测试 Key，并提供虚构简历和岗位。
+
+## 构建Windows便携包（开发者）
+
+在64位Windows和本项目虚拟环境中执行：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-build.txt
+.\.venv\Scripts\python.exe scripts\build_windows.py
+```
+
+每次构建在 `output/windows/build-*/` 中生成新的便携ZIP、SHA256文件和离线自检结果。
+构建只收集程序及网页资源，不包含Key、上传原件、历史、个人笔记或旧Streamlit入口。
+自检不调用付费接口，覆盖网页资源、Markdown、Word/PDF、独立历史读写及SDK初始化。
+使用PyInstaller的文件夹模式打包运行库；资源路径沿用[官方运行时说明](https://pyinstaller.org/en/stable/runtime-information.html)。
 
 ## 核心设计
 
